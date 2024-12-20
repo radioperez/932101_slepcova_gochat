@@ -73,11 +73,12 @@ func handleConnection(conn net.Conn) {
 	clients[username] = conn
 	length := len(clients)
     clientsMu.Unlock()
+
 	connectedMessage := "Подключается пользователь " + username + "\n"
 	fmt.Println(connectedMessage)
 	broadcastMessage("SYSTEM", connectedMessage)
 
-	_, err = conn.Write([]byte("Добро пожаловать! Помимо Вас подключено " + fmt.Sprint(length-1) + " пользователей.\n"))
+	_, err = conn.Write([]byte("Добро пожаловать! Помимо Вас подключено " + fmt.Sprint(length-1) + " пользователей\n"))
 	if err != nil {
 		fmt.Println("Ошибка при отправке промпта пользователю:", err)
 		return
@@ -86,7 +87,7 @@ func handleConnection(conn net.Conn) {
 	for {
 		message, err := reader.ReadString('\n')
         if err != nil {
-			disconnectMessage := username + " отключается.\n"
+			disconnectMessage := username + " отключается\n"
             fmt.Println(disconnectMessage)
 			broadcastMessage("SYSTEM", disconnectMessage)
             clientsMu.Lock()
@@ -160,7 +161,7 @@ func listenForMessages(conn net.Conn) {
     for {
         message, err := reader.ReadString('\n')
         if err != nil {
-            fmt.Println("Disconnected from server.")
+            fmt.Println("Вы отключены от сервера. exit чтобы закрыть клиент.")
             return
         }
 
